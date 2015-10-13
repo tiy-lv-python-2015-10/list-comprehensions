@@ -1,4 +1,5 @@
 import csv
+import datetime
 
 
 def remove_vowels(phrase):
@@ -70,6 +71,70 @@ def avg_hw_one(students_dict):
     return hw_average
 
 
+def convert_dates(csv_file):
+    """
+    creates list of days by number, not sure why
+    """
+    with open(csv_file) as file:
+        reader = csv.DictReader(file)
+        date_list = [datetime.datetime.strptime(row["Date"], '%Y-%m-%d').weekday() for row in reader]
+    return date_list
+
+
+def find_average(dict_list, key):
+    """
+    Takes list of dictionaries containing wave information and returns average of one value
+    """
+    working_sum = 0
+    for num in dict_list:
+        working_sum += float(num[key])
+    return round(working_sum / len(dict_list), 2)
+
+
+def find_weekend(csv_file):
+    """
+    UNFINISHED -- returns one day instead of a weekend
+    Fun Factor is calculated by dividing the stat for each dict into the average for each category, and then
+    adding the total from all stats together. This method assumes that the larger the stat, the more fun
+    """
+    weekend_dict_list = []
+    with open(csv_file) as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if datetime.datetime.strptime(row["Date"], '%Y-%m-%d').weekday() == 5 \
+                    or datetime.datetime.strptime(row["Date"], '%Y-%m-%d').weekday() == 6:
+                weekend_dict_list.append(row)
+
+    wave_period_avg = find_average(weekend_dict_list, 'Wave Period')
+    water_temp_avg = find_average(weekend_dict_list, 'Water Temp')
+    wave_height_avg = find_average(weekend_dict_list, 'Wave Height')
+    waves_per_sec_avg = find_average(weekend_dict_list, 'Avg Waves Per Second')
+
+    for weekend_dict in weekend_dict_list:
+        fun_factor = (float(weekend_dict['Water Temp']) / water_temp_avg) + \
+                     (float(weekend_dict['Wave Period']) / wave_period_avg) + \
+                     (float(weekend_dict['Avg Waves Per Second']) / waves_per_sec_avg) + \
+                     (float(weekend_dict['Wave Height']) / wave_height_avg)
+        weekend_dict['Fun Factor'] = round(fun_factor, 2)
+
+    weekend_fun_list = {datetime.datetime.strptime(weekend_dict['Date'], '%Y-%m-%d'): weekend_dict['Fun Factor']
+                        for weekend_dict in weekend_dict_list}
+
+    cur_fun_score = 0
+    fun_date = datetime.date
+    for date, fun_score in weekend_fun_list.items():
+        if fun_score > cur_fun_score:
+            cur_fun_score = fun_score
+            fun_date = date
+
+    return fun_date
+
+
+if __name__ == '__main__':
+    best_day = find_weekend("buoy.csv")
+    print("The best day to go is {}".format(best_day))
+
+"""
 student_dict = {'Gale': {'Homework 1': 88, 'Homework 2': 76},
                 'Jordan': {'Homework 1': 92, 'Homework 2': 87},
                 'Peyton': {'Homework 1': 84, 'Homework 2': 77},
@@ -87,3 +152,4 @@ print(floats_list)
 print(fahrens)
 print(wave_dict)
 print(hw_1_average)
+"""
