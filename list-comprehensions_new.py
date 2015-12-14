@@ -10,45 +10,49 @@ for char in text:
 print(text)
 
 
-# with open("buoy.csv") as file:
-#     reader = csv.reader(file)
-#     for row in reader:
-#         print(row)
-
-# import csv
-#
-# with open("buoy.csv") as file:
-#     reader = csv.DictReader(file)
-#     temp_list = [temp["Water Temp"] for temp in reader]
-#     print(temp_list)
-
-
+# water Temp for each day from buoy.csv
 with open("buoy.csv") as file:
     reader = csv.DictReader(file)
     temp_list = [temp["Water Temp"] for temp in reader]
     x = (', '.join(temp_list))
     print(x)
 
-    # x = float(input(', '.join(temp_list)))
+
+# convert string to float
+float_temp = [float(temp) for temp in temp_list]
+print(float_temp)
+
+# celsius to fahrenheit rounded to an int
+with open("buoy.csv") as file:
+    fahrenheit = []
+    for temp in file:
+        fahrenheit.append(round(temp * (9 / 5)) + 32)
+    print(fahrenheit)
+
+# create dic with date as the key wave height as value
+with open("buoy.csv") as file:
+    reader = csv.DictReader(file)
+    dictionary = {row["Date"] and row["Wave Height"] for row in reader}
+    print(dictionary)
+
+# create dic with average wave height for each day
+with open("buoy.csv") as file:
+    reader = csv.DictReader(file)
+    wave_height = [height["Wave Height"] for height in reader]
+    x = (', '.join(wave_height))
+    days_total = "31"
+    average_wave_height = (int(input(x) / int(input(days_total))))
+    print(average_wave_height)
 
 
-#
-# with open("buoy.csv") as file:
-#     reader = csv.DictReader(file)
-#     temp_list = [temp["Water Temp"] for temp in reader]
-#     x = (', '.join(temp_list))
-#
-#         celsius = float(input(x))
-#         fahrenheit = (celsius * 1.8) + 32
-#         print(fahrenheit)
+# use following dictionary and
+# create nested comprehension to get an average of homework 1
+
+dictionary = {
+    'Gale': {'Homework 1': 88, 'Homework 2': 76},
+    'Jordan': {'Homework 1': 92, 'Homework 2': 87},
+    'Peyton': {'Homework 1': 84, 'Homework 2': 77},
+    'River': {'Homework 1': 85, 'Homework 2': 91}
+}
 
 
-#
-# def str_to_float(temp_list):
-#
-#     float_temp_list = [float(temp) for temp in temp_list]
-#     return float_temp_list
-#
-# def string_to_float(list):
-#     new_list = [float(items) for items in list]
-#     return new_list
