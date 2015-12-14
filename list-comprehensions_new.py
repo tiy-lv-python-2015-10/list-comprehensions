@@ -55,4 +55,13 @@ dictionary = {
     'River': {'Homework 1': 85, 'Homework 2': 91}
 }
 
+scores =[
+    home_work["Homework 1"]
+    for home_work in students_dict()
+]
+home_work_average = sum(scores) / len(scores)
+print(home_work_average)
+
+
+
 
